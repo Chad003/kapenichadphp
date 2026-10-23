@@ -82,7 +82,7 @@ try {
 
 $activeCategory = 'Coffee';
 
-if(isset($CATEGORY_FROM_REQUEST)){
+if (isset($CATEGORY_FROM_REQUEST)) {
     $activeCategory = $CATEGORY_FROM_REQUEST;
 }
 
@@ -162,13 +162,19 @@ if(isset($CATEGORY_FROM_REQUEST)){
                     <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                         <?php foreach ($items as $item): ?>
                             <article class="product-card overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
+
                                 <div class="relative aspect-square bg-neutral-200">
                                     <img
                                         src="<?= htmlspecialchars($item['image'], ENT_QUOTES, 'UTF-8') ?>"
                                         alt="<?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>"
                                         onerror="setDefaultProductImage(event)"
                                         loading="lazy"
-                                        class="h-full w-full object-contain">
+                                        class="h-full w-full object-contain <?= !$item['available'] ? 'grayscale' : '' ?>">
+
+                                    <?php if (!$item['available']): ?>
+                                        <div class="absolute inset-0 bg-black/30 pointer-events-none"></div>
+                                    <?php endif; ?>
+
                                     <span class="absolute left-2 top-2 rounded-full px-2 py-1 text-[9px] font-black <?= $item['available'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?>">
                                         <?= $item['available'] ? 'AVAILABLE' : 'NOT AVAILABLE' ?>
                                     </span>
