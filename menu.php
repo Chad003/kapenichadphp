@@ -47,7 +47,7 @@ try {
             IS_BEST_SELLER,
             IS_AVAILABLE
         FROM t_products
-        ORDER BY SELLING_PRICE DESC
+        ORDER BY SELLING_PRICE, IS_AVAILABLE DESC
     ";
 
     $stmt = $pdo->prepare($sql);
