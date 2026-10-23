@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/utils/load-env.php';
 
+// Get category from get request
+$CATEGORY_FROM_REQUEST = $_GET['category'];
+
 $categories = [
     'Coffee' => [],
     'Frappe' => [],
@@ -78,6 +81,11 @@ try {
 }
 
 $activeCategory = 'Coffee';
+
+if(isset($CATEGORY_FROM_REQUEST)){
+    $activeCategory = $CATEGORY_FROM_REQUEST;
+}
+
 ?>
 
 
