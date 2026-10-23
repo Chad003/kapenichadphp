@@ -151,17 +151,13 @@ $stamps = [
             <div class="mb-3 h-1.5 shrink-0 overflow-hidden rounded-full bg-neutral-100">
                 <div class="h-full rounded-full bg-yellow-400 transition-all" style="width: <?= $progress ?>%"></div>
             </div>
-			
-			<?php 
-			$LOGO = file_get_contents('logo.txt');
-			?>
-
+		
             <div class="stamp-grid grid min-h-0 flex-1 grid-cols-5 grid-rows-2 gap-2">
                 <?php foreach ($stamps as $index => $stamp): ?>
                     <?php $isPunched = !empty($punches[$index]); ?>
                     <div
                         class="relative min-h-0 overflow-hidden rounded-xl border-2 <?= $isPunched ? 'punched border-yellow-400' : 'unpunched border-neutral-200' ?>">
-                        <img class="stamp-photo" src="<?= $LOGO ?>" alt="SipUp Logo by Chad" />
+                        <img class="stamp-photo" src="/assets/img/logo.png" alt="SipUp Logo by Chad" />
                         <div class="stamp-shade"></div>
                         <span class="stamp-status"
                             aria-label="<?= $isPunched ? 'Punched' : 'Not punched' ?>"><?= $isPunched ? '✓' : '○' ?></span>

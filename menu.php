@@ -236,7 +236,8 @@ $activeCategory = 'Coffee';
 
         function setDefaultProductImage(e) {
             const image = e.target;
-            image.src = "/assets/img/logo.png"
+            console.error(`Cannot find image ${image}`)
+            // image.src = "/assets/img/logo.png"
         }
     </script>
 
