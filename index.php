@@ -2,40 +2,18 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SipUp Coffee By Chad</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <?php include(__DIR__  . "/components/links.php") ?>
     <style>
         body {
             font-family: 'Poppins', sans-serif;
         }
     </style>
-    <link rel="icon" href="https://scontent.fmnl3-1.fna.fbcdn.net/v/t39.30808-6/411529740_209721208882236_2730792827248145209_n.jpg?stp=dst-jpg_tt6&cstp=mx1200x1200&ctp=s1200x1200&_nc_cat=108&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeERHC2q5CNKiwiypoIpC6fi9xkXQprHfOT3GRdCmsd85FEVsPPLNEWVt6uMmPTWtIpJtgiaEKggk_lf68GDTx3h&_nc_ohc=uLsjhJpEoqYQ7kNvwEsnP9n&_nc_oc=AdpFbSBkXMIXYeTzXlolBhaH8P5DXFl2l3CwwOZ9Gbfnj_8BBINxAXfEBUui19xOO14&_nc_zt=23&_nc_ht=scontent.fmnl3-1.fna&_nc_gid=2dYtapuYe7m2irSKgcPmNw&_nc_ss=7b2a8&oh=00_AQMFAoVUHPbnHELlFmM1_7az0HyEABB8tBZj2fxknRbS-g&oe=6AD39A82">
 </head>
 
 <body class="bg-[#faf8f5] text-[#2d211b]">
 
-    <header class="border-b border-[#e9e0d7] bg-white">
-        <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-            <a href="#" class="flex items-center gap-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#3b261b] text-white">
-                    <i data-lucide="coffee" class="h-5 w-5"></i>
-                </div>
-                <div>
-                    <h1 class="text-lg font-bold tracking-tight">SipUp Coffee By Chad</h1>
-                    <p class="text-[10px] font-medium uppercase tracking-[2px] text-[#98765b]">Franchise Opportunity</p>
-                </div>
-            </a>
-            <a href="#inquiry"
-                class="rounded-lg bg-[#3b261b] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#60432f]">
-                Inquire Now
-            </a>
-        </div>
-    </header>
+    <?php include(__DIR__  . "/components/header.php") ?>
 
     <main>
         <section class="mx-auto grid max-w-6xl items-center gap-10 px-5 py-14 md:grid-cols-2 md:py-20">
@@ -57,7 +35,7 @@
 
                 <a href="#inquiry"
                     class="mt-7 inline-flex items-center gap-2 rounded-lg bg-[#3b261b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#60432f]">
-                    Get Franchise Details
+                    Franchise Now
                     <i data-lucide="arrow-right" class="h-4 w-4"></i>
                 </a>
 

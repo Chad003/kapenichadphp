@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/utils/load-env.php';
 
-// Get category from get request
-$CATEGORY_FROM_REQUEST = $_GET['category'];
 
 $categories = [
     'Coffee' => [],
@@ -47,7 +45,7 @@ try {
             IS_BEST_SELLER,
             IS_AVAILABLE
         FROM t_products
-        ORDER BY SELLING_PRICE, IS_AVAILABLE DESC
+        ORDER BY IS_AVAILABLE, SELLING_PRICE  DESC
     ";
 
     $stmt = $pdo->prepare($sql);
@@ -82,8 +80,8 @@ try {
 
 $activeCategory = 'Coffee';
 
-if (isset($CATEGORY_FROM_REQUEST)) {
-    $activeCategory = $CATEGORY_FROM_REQUEST;
+if (isset($_GET['category'])) {
+    $activeCategory = $_GET['category'];
 }
 
 ?>
@@ -93,10 +91,8 @@ if (isset($CATEGORY_FROM_REQUEST)) {
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu | SipUp Coffee By Chad</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <?php include(__DIR__  . "/components/links.php") ?>
     <style>
         html,
         body {
@@ -136,15 +132,9 @@ if (isset($CATEGORY_FROM_REQUEST)) {
 
     <div class="flex h-[100dvh] flex-col">
 
-        <header class="z-10 shrink-0 bg-neutral-900 px-4 py-4 text-white shadow">
-            <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-yellow-300">
-                SipUp Coffee By Chad
-            </p>
-            <h1 class="mt-1 text-2xl font-black">Our Menu</h1>
-            <p class="mt-1 text-xs text-neutral-400">Find your next favorite drink or snack.</p>
-        </header>
+        <?php include(__DIR__  . "/components/header.php") ?>
 
-        <main id="menuContent" class="menu-scroll flex-1 px-3 py-4 sm:px-5">
+        <main id="menuContent" class="menu-scroll flex-1 px-3 py-1 sm:px-5">
             <?php foreach ($categories as $category => $items): ?>
                 <section class="category-section <?= $category === $activeCategory ? '' : 'hidden' ?>"
                     data-category="<?= htmlspecialchars($category) ?>">
@@ -159,7 +149,7 @@ if (isset($CATEGORY_FROM_REQUEST)) {
                         </span>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+                    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-8">
                         <?php foreach ($items as $item): ?>
                             <article class="product-card overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
 
@@ -184,9 +174,7 @@ if (isset($CATEGORY_FROM_REQUEST)) {
                                     <h3 class="text-sm font-extrabold leading-tight">
                                         <?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>
                                     </h3>
-                                    <p class="mt-1 min-h-8 text-[11px] leading-relaxed text-neutral-500">
-                                        <?= htmlspecialchars($item['description'], ENT_QUOTES, 'UTF-8') ?>
-                                    </p>
+
                                     <div class="mt-3 text-lg font-black">
                                         ₱<?= number_format($item['price'], 2) ?>
                                     </div>
@@ -202,10 +190,10 @@ if (isset($CATEGORY_FROM_REQUEST)) {
             <div class="mx-auto grid max-w-lg grid-cols-6 gap-1">
                 <?php
                 $icons = [
-                    'Coffee' => '/assets/icons/coffee1.svg',
+                    'Coffee' => '/assets/icons/coffee.png',
                     'Frappe' => '/assets/icons/frappe.svg',
-                    'Milk Tea' => '/assets/icons/milktea.svg',
-                    'Ice Cream' => '/assets/icons/ice-cream.svg',
+                    'Milk Tea' => '/assets/icons/milktea.png',
+                    'Ice Cream' => '/assets/icons/ice-cream.png',
                     'Snacks' => '/assets/icons/fries.svg',
                     'Non Coffee' => '/assets/icons/non-coffee.svg',
                 ];
