@@ -45,7 +45,7 @@ try {
             IS_BEST_SELLER,
             IS_AVAILABLE
         FROM t_products
-        ORDER BY IS_AVAILABLE, SELLING_PRICE  DESC
+        ORDER BY CATEGORY, IS_AVAILABLE DESC;
     ";
 
     $stmt = $pdo->prepare($sql);
@@ -149,42 +149,79 @@ if (isset($_GET['category'])) {
                         </span>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-8">
+                    <div class="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-8">
                         <?php foreach ($items as $item): ?>
-                            <article class="product-card overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
+                            <article class="product-card flex flex-col justify-between overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
 
-                                <div class="relative aspect-square bg-neutral-200">
-                                    <img
-                                        src="<?= htmlspecialchars($item['image'], ENT_QUOTES, 'UTF-8') ?>"
-                                        alt="<?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>"
-                                        onerror="setDefaultProductImage(event)"
-                                        loading="lazy"
-                                        class="h-full w-full object-contain <?= !$item['available'] ? 'grayscale' : '' ?>">
+                                <div>
+                                    <div class="relative aspect-square bg-neutral-200">
+                                        <img
+                                            src="<?= htmlspecialchars($item['image'], ENT_QUOTES, 'UTF-8') ?>"
+                                            alt="<?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>"
+                                            onerror="setDefaultProductImage(event)"
+                                            loading="lazy"
+                                            class="h-full w-full object-contain <?= !$item['available'] ? 'grayscale' : '' ?>">
 
-                                    <?php if (!$item['available']): ?>
-                                        <div class="absolute inset-0 bg-black/30 pointer-events-none"></div>
-                                    <?php endif; ?>
+                                        <?php if (!$item['available']): ?>
+                                            <div class="absolute inset-0 bg-black/30 pointer-events-none"></div>
+                                        <?php endif; ?>
 
-                                    <span class="absolute left-2 top-2 rounded-full px-2 py-1 text-[9px] font-black <?= $item['available'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?>">
-                                        <?= $item['available'] ? 'AVAILABLE' : 'NOT AVAILABLE' ?>
-                                    </span>
-                                </div>
+                                        <span class="absolute left-2 top-2 rounded-full px-2 py-1 text-[9px] font-black <?= $item['available'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?>">
+                                            <?= $item['available'] ? 'AVAILABLE' : 'NOT AVAILABLE' ?>
+                                        </span>
+                                    </div>
 
-                                <div class="p-3">
-                                    <h3 class="text-sm font-extrabold leading-tight">
-                                        <?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>
-                                    </h3>
+                                    <div class="p-3">
+                                        <h3 class="text-sm leading-tight text-pretty">
+                                            <?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>
+                                        </h3>
 
-                                    <div class="mt-3 text-lg font-black">
-                                        ₱<?= number_format($item['price'], 2) ?>
+                                        <div class="mt-2 text-lg font-black">
+                                            ₱<?= number_format($item['price'], 2) ?>
+                                        </div>
                                     </div>
                                 </div>
+
+                                <!-- Add to Cart Button Section -->
+                                <div style="display: none;" class="p-3 pt-0">
+                                    <?php if ($item['available']): ?>
+                                        <button
+                                            type="button"
+                                            onclick="addToCart(<?= htmlspecialchars(json_encode($item['id'] ?? $item['name']), ENT_QUOTES, 'UTF-8') ?>)"
+                                            class="w-full rounded-xl bg-neutral-900 py-2 px-3 text-xs font-bold text-white transition hover:bg-neutral-800 active:scale-95">
+                                            Add to Cart
+                                        </button>
+                                    <?php else: ?>
+                                        <button
+                                            type="button"
+                                            disabled
+                                            class="w-full rounded-xl bg-neutral-100 py-2 px-3 text-xs font-bold text-neutral-400 cursor-not-allowed">
+                                            Unavailable
+                                        </button>
+                                    <?php endif; ?>
+                                </div>
+
                             </article>
                         <?php endforeach; ?>
                     </div>
                 </section>
             <?php endforeach; ?>
         </main>
+
+        <div class="fixed bottom-[9rem] right-4 z-50 sm:right-6" style="display:none">
+            <button
+                type="button"
+                onclick="toggleCartModal()"
+                aria-label="Shopping Cart"
+                class="group relative flex items-center justify-center rounded-full bg-neutral-900 p-4 text-white shadow-lg transition-all duration-300 hover:bg-neutral-800 hover:scale-105 active:scale-95">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H19m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span id="cartBadge" class="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-black text-white shadow">
+                    0
+                </span>
+            </button>
+        </div>
 
         <nav class="z-20 shrink-0 border-t border-neutral-200 bg-white px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-5px_20px_rgba(0,0,0,0.06)]">
             <div class="mx-auto grid max-w-lg grid-cols-6 gap-1">
@@ -241,6 +278,82 @@ if (isset($_GET['category'])) {
             console.error(`Cannot find image ${image}`)
             // image.src = "/assets/img/logo.png"
         }
+
+        /**
+         * Sends a request to add an item to the cart based on the table schema.
+         * 
+         * @param {Object} cartData - The cart details matching the table columns.
+         * @param {string} cartData.device_fingerprint - Unique device identifier (Required)
+         * @param {string} [cartData.customer_name] - Customer name (Optional)
+         * @param {string} [cartData.phone_number] - Customer phone number (Optional)
+         * @param {number} cartData.product_id - Product ID (Required, bigint)
+         * @param {number} cartData.quantity - Quantity to add (Required, int)
+         * @param {number} cartData.price - Unit price (Required, decimal)
+         * @param {number} [cartData.promo_id] - Promotional ID (Optional, bigint)
+         */
+        async function addToCart(cartData) {
+            const url = '/api/order/add-to-cart.php';
+
+            // Construct payload matching the database column requirements
+            const payload = {
+                DEVICE_FINGERPRINT: cartData.device_fingerprint,
+                CUSTOMER_NAME: cartData.customer_name || null,
+                PHONE_NUMBER: cartData.phone_number || null,
+                PRODUCT_ID: cartData.product_id,
+                QUANTITY: cartData.quantity,
+                PRICE: cartData.price,
+                PROMO_ID: cartData.promo_id || 0
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                // Parse response safely
+                const contentType = response.headers.get('content-type');
+                const data = contentType && contentType.includes('application/json') ?
+                    await response.json() :
+                    await response.text();
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`, {
+                        cause: data
+                    });
+                }
+
+                console.log('Successfully added to cart:', data);
+                return {
+                    success: true,
+                    data
+                };
+
+            } catch (error) {
+                console.error('Failed to add to cart:', error);
+                return {
+                    success: false,
+                    error: error.message
+                };
+            }
+        }
+
+        // --- Example Usage ---
+        /*
+        addToCart({
+            device_fingerprint: "fp_abc123xyz789",
+            customer_name: "Juan Dela Cruz",
+            phone_number: "+639123456789",
+            product_id: 1042,
+            quantity: 2,
+            price: 350.00,
+            promo_id: 5
+        });
+        */
     </script>
 
 </body>

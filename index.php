@@ -16,14 +16,8 @@
     <?php include(__DIR__  . "/components/header.php") ?>
 
     <main>
-        <section class="mx-auto grid max-w-6xl items-center gap-10 px-5 py-14 md:grid-cols-2 md:py-20">
+        <section class="mx-auto grid max-w-6xl items-center gap-10 px-5 py-2 md:grid-cols-2 md:py-20">
             <div>
-                <span
-                    class="inline-flex items-center gap-2 rounded-full bg-[#efe4d8] px-3 py-1.5 text-xs font-semibold text-[#79563d]">
-                    <i data-lucide="coffee" class="h-3.5 w-3.5"></i>
-                    YOUR COFFEE BUSINESS STARTS HERE
-                </span>
-
                 <h2 class="mt-6 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
                     Start Your Own <span class="text-[#a16d43]">Coffee Business.</span>
                 </h2>
@@ -32,6 +26,20 @@
                     Interested in the SipUp Coffee franchise? Send your inquiry to learn more about the franchise
                     package, requirements, and how to get started.
                 </p>
+
+                <a href="/menu.php"
+                    class="mt-7 inline-flex items-center gap-2 rounded-lg bg-[#fff] px-6 py-3.5 text-sm font-semibold border-2 border-[#3b261b] transition">
+                    Order Now
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart-plus preview-icon">
+                        <path d="M16 5h6" />
+                        <path d="M19 2v6" />
+                        <path d="m2.05 2.05 1.099-.028a1 1 0 011.008.815l2.69 14.347A1 1 0 007.83 18H18" />
+                        <path d="M4.564 5H12" />
+                        <path d="M6.25 14h12.712a2 2 0 001.991-1.57l.172-1.041" />
+                        <circle cx="18" cy="20" r="2" />
+                        <circle cx="8" cy="20" r="2" />
+                    </svg>
+                </a>
 
                 <a href="#inquiry"
                     class="mt-7 inline-flex items-center gap-2 rounded-lg bg-[#3b261b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#60432f]">
