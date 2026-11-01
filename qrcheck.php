@@ -1,4 +1,3 @@
-
 <?php
 require_once __DIR__ . '/utils/load-env.php';
 
@@ -108,23 +107,21 @@ $stamps = [
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#171717">
     <title>SipUp Coffee | Punch Card</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <?php include(__DIR__  . "/components/links.php") ?>
     <link rel="stylesheet" href="/assets/css/qrcheck.css">
 </head>
 
 <body class="bg-neutral-100 text-neutral-900">
+
+    <?php include(__DIR__  . "/components/header.php") ?>
+
     <main class="page-shell mx-auto flex h-[100dvh] w-full max-w-2xl flex-col gap-3 px-3 py-3 sm:px-5 sm:py-4">
-        <header
+        <div
             class="flex shrink-0 items-center justify-between rounded-2xl bg-neutral-900 px-4 py-3 text-white sm:px-5">
             <div class="min-w-0">
-                <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-yellow-300 sm:text-xs">SipUp Coffee By
-                    Chad</p>
                 <h1 class="brand-title mt-1 text-2xl font-black tracking-tight sm:text-3xl">Loyalty Card</h1>
-                <p class="mt-1 truncate text-xs text-neutral-300 sm:text-sm">
+                <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-yellow-300 sm:text-xs">
                     <?= htmlspecialchars($customerName, ENT_QUOTES, 'UTF-8') ?> <span class="text-neutral-500">·
                         <?= htmlspecialchars($customerId, ENT_QUOTES, 'UTF-8') ?></span></p>
             </div>
@@ -134,8 +131,9 @@ $stamps = [
                 <div class="mt-1 text-[10px] font-semibold uppercase tracking-wider text-neutral-300 sm:text-xs">Stamps
                 </div>
             </div>
-        </header>
-		
+        </div>
+
+
         <section
             class="flex min-h-0 flex-1 flex-col rounded-2xl border border-neutral-200 bg-white p-3 shadow-sm sm:p-4">
             <div class="mb-3 flex shrink-0 items-end justify-between gap-2">
@@ -151,20 +149,24 @@ $stamps = [
             <div class="mb-3 h-1.5 shrink-0 overflow-hidden rounded-full bg-neutral-100">
                 <div class="h-full rounded-full bg-yellow-400 transition-all" style="width: <?= $progress ?>%"></div>
             </div>
-		
-            <div class="stamp-grid grid min-h-0 flex-1 grid-cols-5 grid-rows-2 gap-2">
+
+            <div class="stamp-grid grid flex-1 grid-cols-2 sm:grid-cols-5 grid-rows-5 sm:grid-rows-2 gap-2 sm:gap-3 min-h-0 h-full w-full p-2 sm:p-4">
                 <?php foreach ($stamps as $index => $stamp): ?>
                     <?php $isPunched = !empty($punches[$index]); ?>
-                    <div
-                        class="relative min-h-0 overflow-hidden rounded-xl border-2 <?= $isPunched ? 'punched border-yellow-400' : 'unpunched border-neutral-200' ?>">
-                        <img class="stamp-photo" src="/assets/img/logo.png" alt="SipUp Logo by Chad" />
+                    <div class="relative flex flex-col items-center justify-center min-h-0 overflow-hidden rounded-xl border-2 transition-all <?= $isPunched ? 'punched border-yellow-400 bg-yellow-50/20' : 'unpunched border-neutral-200 bg-neutral-50/50' ?>">
+
+                        <!-- Stamp Image -->
+                        <img class="stamp-photo object-cover opacity-80 mb-1" src="/assets/img/logo.png" alt="SipUp Logo by Chad" />
                         <div class="stamp-shade"></div>
-                        <span class="stamp-status"
+
+                        <span class="stamp-status absolute top-2 right-2 text-xs sm:text-sm font-bold"
                             aria-label="<?= $isPunched ? 'Punched' : 'Not punched' ?>"><?= $isPunched ? '✓' : '○' ?></span>
-                        <span class="stamp-label"><?= htmlspecialchars($stamp['label'], ENT_QUOTES, 'UTF-8') ?></span>
+
+                        <!-- Stamp Label -->
+                        <span class="stamp-label text-[10px] sm:text-xs font-medium text-center px-1 truncate w-full"><?= htmlspecialchars($stamp['label'], ENT_QUOTES, 'UTF-8') ?></span>
+
                         <?php if ($isPunched): ?>
-                            <span
-                                class="absolute inset-0 z-[1] border-2 border-yellow-300/70 rounded-lg pointer-events-none"></span>
+                            <span class="absolute inset-0 z-[1] border-2 border-yellow-300/70 rounded-lg pointer-events-none"></span>
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
