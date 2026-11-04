@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . '/utils/load-env.php';
 
-
 $categories = [
     'Coffee' => [],
     'Frappe' => [],
@@ -142,7 +141,6 @@ if (isset($_GET['category'])) {
                     <div class="mb-4 flex items-center justify-between">
                         <div>
                             <h2 class="text-xl font-black"><?= htmlspecialchars($category) ?></h2>
-                            <p class="mt-1 text-xs text-neutral-500">Made to brighten your day.</p>
                         </div>
                         <span class="rounded-full bg-white px-3 py-1 text-xs font-bold text-neutral-600">
                             <?= count(array_filter($items, fn($item) => $item['available'])) ?> available
@@ -164,14 +162,14 @@ if (isset($_GET['category'])) {
 
                                         <?php if (!$item['available']): ?>
                                             <div class="absolute inset-0 bg-black/30 pointer-events-none"></div>
+                                            <span class="absolute left-2 top-2 rounded-full px-2 py-1 text-[9px] font-black bg-red-100 text-red-800">
+                                                NOT AVAILABLE
+                                            </span>
                                         <?php endif; ?>
 
-                                        <span class="absolute left-2 top-2 rounded-full px-2 py-1 text-[9px] font-black <?= $item['available'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?>">
-                                            <?= $item['available'] ? 'AVAILABLE' : 'NOT AVAILABLE' ?>
-                                        </span>
                                     </div>
 
-                                    <div class="p-3">
+                                    <div class="p-[0.35rem]">
                                         <h3 class="text-sm leading-tight text-pretty">
                                             <?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>
                                         </h3>
@@ -182,25 +180,6 @@ if (isset($_GET['category'])) {
                                     </div>
                                 </div>
 
-                                <!-- Add to Cart Button Section -->
-                                <div style="display: none;" class="p-3 pt-0">
-                                    <?php if ($item['available']): ?>
-                                        <button
-                                            type="button"
-                                            onclick="addToCart(<?= htmlspecialchars(json_encode($item['id'] ?? $item['name']), ENT_QUOTES, 'UTF-8') ?>)"
-                                            class="w-full rounded-xl bg-neutral-900 py-2 px-3 text-xs font-bold text-white transition hover:bg-neutral-800 active:scale-95">
-                                            Add to Cart
-                                        </button>
-                                    <?php else: ?>
-                                        <button
-                                            type="button"
-                                            disabled
-                                            class="w-full rounded-xl bg-neutral-100 py-2 px-3 text-xs font-bold text-neutral-400 cursor-not-allowed">
-                                            Unavailable
-                                        </button>
-                                    <?php endif; ?>
-                                </div>
-
                             </article>
                         <?php endforeach; ?>
                     </div>
@@ -208,12 +187,12 @@ if (isset($_GET['category'])) {
             <?php endforeach; ?>
         </main>
 
-        <div class="fixed bottom-[9rem] right-4 z-50 sm:right-6" style="display:none">
+        <div class="fixed bottom-[9rem] right-4 z-50 sm:right-6">
             <button
                 type="button"
                 onclick="toggleCartModal()"
                 aria-label="Shopping Cart"
-                class="group relative flex items-center justify-center rounded-full bg-neutral-900 p-4 text-white shadow-lg transition-all duration-300 hover:bg-neutral-800 hover:scale-105 active:scale-95">
+                class="group relative flex items-center justify-center rounded-full bg-neutral-900 p-[.5rem] text-white shadow-lg transition-all duration-300 hover:bg-neutral-800 hover:scale-105 active:scale-95">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H19m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
@@ -223,28 +202,52 @@ if (isset($_GET['category'])) {
             </button>
         </div>
 
-        <nav class="z-20 shrink-0 border-t border-neutral-200 bg-white px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 shadow-[0_-5px_20px_rgba(0,0,0,0.06)]">
-            <div class="mx-auto grid max-w-lg grid-cols-6 gap-1">
-                <?php
-                $icons = [
-                    'Coffee' => '/assets/icons/coffee.png',
-                    'Frappe' => '/assets/icons/frappe.svg',
-                    'Milk Tea' => '/assets/icons/milktea.png',
-                    'Ice Cream' => '/assets/icons/ice-cream.png',
-                    'Snacks' => '/assets/icons/fries.svg',
-                    'Non Coffee' => '/assets/icons/non-coffee.svg',
-                ];
-                foreach ($categories as $category => $items):
-                ?>
-                    <button
-                        type="button"
-                        class="category-btn <?= $category === $activeCategory ? 'active' : '' ?> flex flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-neutral-600"
-                        data-target="<?= htmlspecialchars($category) ?>"
-                        aria-pressed="<?= $category === $activeCategory ? 'true' : 'false' ?>">
-                        <span class="text-xl leading-none"><img src="<?= $icons[$category] ?>" class="object-contain"></span>
-                        <span class="text-[10px] font-bold sm:text-xs"><?= htmlspecialchars($category) ?></span>
-                    </button>
-                <?php endforeach; ?>
+        <nav class="z-20 shrink-0 border-t border-neutral-200 bg-white px-3 pb-[max(6px,env(safe-area-inset-bottom))] pt-2 sm:px-4 shadow-[0_-5px_20px_rgba(0,0,0,0.04)]">
+            <div class="mx-auto grid max-w-md grid-cols-4 gap-1.5 sm:gap-2">
+
+                <!-- Coffee -->
+                <button type="button"
+                    class="category-btn <?= 'Coffee' === $activeCategory ? 'active' : '' ?> flex flex-col items-center justify-center gap-0.5 sm:gap-1 rounded-xl px-1.5 py-1.5 sm:py-2 text-neutral-600 transition-colors hover:bg-neutral-50"
+                    data-target="Coffee"
+                    aria-pressed="<?= 'Coffee' === $activeCategory ? 'true' : 'false' ?>">
+                    <span class="flex h-10 w-10 items-center justify-center sm:h-6 sm:w-6">
+                        <img src="/assets/icons/coffee.png" class="h-full w-full object-contain">
+                    </span>
+                    <span class="text-[10px] font-semibold sm:text-xs">Coffee</span>
+                </button>
+
+                <!-- Frappe -->
+                <button type="button"
+                    class="category-btn <?= 'Frappe' === $activeCategory ? 'active' : '' ?> flex flex-col items-center justify-center gap-0.5 sm:gap-1 rounded-xl px-1.5 py-1.5 sm:py-2 text-neutral-600 transition-colors hover:bg-neutral-50"
+                    data-target="Frappe"
+                    aria-pressed="<?= 'Frappe' === $activeCategory ? 'true' : 'false' ?>">
+                    <span class="flex h-10 w-10 items-center justify-center sm:h-6 sm:w-6">
+                        <img src="/assets/icons/frappe.svg" class="h-full w-full object-contain">
+                    </span>
+                    <span class="text-[10px] font-semibold sm:text-xs">Frappe</span>
+                </button>
+
+                <!-- Milk Tea -->
+                <button type="button"
+                    class="category-btn <?= 'Milk Tea' === $activeCategory ? 'active' : '' ?> flex flex-col items-center justify-center gap-0.5 sm:gap-1 rounded-xl px-1.5 py-1.5 sm:py-2 text-neutral-600 transition-colors hover:bg-neutral-50"
+                    data-target="Milk Tea"
+                    aria-pressed="<?= 'Milk Tea' === $activeCategory ? 'true' : 'false' ?>">
+                    <span class="flex h-10 w-10 items-center justify-center sm:h-6 sm:w-6">
+                        <img src="/assets/icons/milktea.png" class="h-full w-full object-contain">
+                    </span>
+                    <span class="text-[10px] font-semibold sm:text-xs">Milk Tea</span>
+                </button>
+
+                <!-- Non Coffee -->
+                <button type="button"
+                    class="category-btn <?= 'Non Coffee' === $activeCategory ? 'active' : '' ?> flex flex-col items-center justify-center gap-0.5 sm:gap-1 rounded-xl px-1.5 py-1.5 sm:py-2 text-neutral-600 transition-colors hover:bg-neutral-50"
+                    data-target="Non Coffee"
+                    aria-pressed="<?= 'Non Coffee' === $activeCategory ? 'true' : 'false' ?>">
+                    <span class="flex h-10 w-10 items-center justify-center sm:h-6 sm:w-6">
+                        <img src="/assets/icons/non-coffee.svg" class="h-full w-full object-contain">
+                    </span>
+                    <span class="text-[10px] font-semibold sm:text-xs">Non Coffee</span>
+                </button>
             </div>
         </nav>
 
